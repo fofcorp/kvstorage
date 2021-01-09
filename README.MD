@@ -5,6 +5,7 @@ Tier1 features:
 - [ ] http api server with handlers
 - [ ] request logging via middleware
 - [ ] expiring keys with garbage collection
+- [ ] graceful shutdown
 - [ ] numeric values with atomic increment/decrement (special operations - /incr, /decr)
 - [ ] service options via config package (from os environment(prioritized) && yml)
 - [ ] simple user-load generator for tests
@@ -17,8 +18,9 @@ Tier1 features:
 - [ ] endpoint with personalized auth-token generator (you will need global auth token anyway here)
 
 Tier2 features:
+- [ ] data encryption
 - [ ] authorization on ops with RBAC (set/get/delete)
 - [ ] client golang library (integration with API)
 - [ ] rate limiting (global + personalized by header)
-- [ ] reboot persistence
+- [ ] data persistence
 - [ ] distributed running with peers (leader election or gossip or ???)
