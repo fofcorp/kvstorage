@@ -5,11 +5,14 @@ import (
 	"log"
 	"net/http"
 	"time"
+
+	"github.com/fofcorp/kvstorage/src/storage"
 )
 
 // Options for http web server.
 type Options struct {
-	Port string
+	Port  string
+	Store storage.Storage
 }
 
 // Server represents http web server.
@@ -25,6 +28,9 @@ func Init(options *Options) (*Server, error) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))
 	})
+	mux.HandleFunc("/api/v0/get", GetHandler(options.Store))
+	mux.HandleFunc("/api/v0/put", PutHandler(options.Store))
+	mux.HandleFunc("/api/v0/delete", DeleteHandler(options.Store))
 	addr := fmt.Sprintf("localhost:%s", options.Port)
 	instance := &http.Server{
 		Handler:           mux,

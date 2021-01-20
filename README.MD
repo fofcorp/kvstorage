@@ -2,7 +2,8 @@
 
 Tier1 features:  
 - [x] basic key-value storage
-- [ ] http api server with handlers
+- [x] http api server with handlers
+- [ ] logging
 - [ ] request logging via middleware
 - [ ] expiring keys with garbage collection
 - [ ] graceful shutdown

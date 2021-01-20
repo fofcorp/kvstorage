@@ -10,7 +10,12 @@ import (
 func main() {
 	store := storage.InitInMemory()
 	log.Println(store)
-	serv, err := httpserv.Init(&httpserv.Options{Port: "8888"})
+	serv, err := httpserv.Init(
+		&httpserv.Options{
+			Port:  "8888",
+			Store: store,
+		},
+	)
 	if err != nil {
 		log.Fatalln(err)
 	}
