@@ -2,11 +2,11 @@ package httpserv
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 	"time"
 
 	"github.com/fofcorp/kvstorage/src/storage"
+	log "github.com/sirupsen/logrus"
 )
 
 // Options for http web server.
@@ -28,9 +28,28 @@ func Init(options *Options) (*Server, error) {
 		w.WriteHeader(http.StatusOK)
 		w.Write([]byte("OK"))
 	})
-	mux.HandleFunc("/api/v0/get", GetHandler(options.Store))
-	mux.HandleFunc("/api/v0/put", PutHandler(options.Store))
-	mux.HandleFunc("/api/v0/delete", DeleteHandler(options.Store))
+	middlewares := []Middleware{
+		AccessLog,
+	}
+
+	mux.Handle("/api/v0/get",
+		MiddlewareChain(
+			http.HandlerFunc(GetHandler(options.Store)),
+			middlewares...,
+		),
+	)
+	mux.Handle("/api/v0/put",
+		MiddlewareChain(
+			http.HandlerFunc(PutHandler(options.Store)),
+			middlewares...,
+		),
+	)
+	mux.Handle("/api/v0/delete",
+		MiddlewareChain(
+			http.HandlerFunc(DeleteHandler(options.Store)),
+			middlewares...,
+		),
+	)
 	addr := fmt.Sprintf("localhost:%s", options.Port)
 	instance := &http.Server{
 		Handler:           mux,
@@ -45,7 +64,10 @@ func Init(options *Options) (*Server, error) {
 
 // Run http web server.
 func (srv *Server) Run() error {
-	log.Printf("[httpserv] Start listening on %s\n", srv.instance.Addr)
+	log.WithFields(log.Fields{
+		"module": "httpserv",
+		"host":   srv.instance.Addr,
+	}).Info("httpserv_start")
 	err := srv.instance.ListenAndServe()
 	return err
 }
