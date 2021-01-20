@@ -18,6 +18,8 @@ Tier1 features:
 - [ ] endpoint with personalized auth-token generator (you will need global auth token anyway here)
 
 Tier2 features:
+- [ ] JSON-RPC endpoint
+- [ ] gRPC endpoint
 - [ ] data encryption
 - [ ] authorization on ops with RBAC (set/get/delete)
 - [ ] client golang library (integration with API)
